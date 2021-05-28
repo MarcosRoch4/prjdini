@@ -18,8 +18,8 @@ func HandAndSalt(pass []byt) string {
 	return string(hashed)
 }
 
-func ConectDB() *gormlDB {
+func ConectDB() *gorm.DB {
 	db, er := gorm.Open("postgres", "host=127.0.0.1 port=5432 user=postgres dbname=bankapp password=postgres sslmode=disable")
-	helper.HandlerErr(err)
+	HandlerErr(err)
 	return db
 }

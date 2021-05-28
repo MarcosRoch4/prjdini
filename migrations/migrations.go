@@ -1,7 +1,7 @@
 package migrations
 
 import (
-	"landini?helper"
+	"github.com/MarcosRoch4/prjdini?helper"
 	"github.com/jinzhu/gorm"
 	
 )
