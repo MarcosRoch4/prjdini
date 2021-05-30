@@ -14,7 +14,7 @@ type Account struct {
 	Type    string
 	Name    string
 	Balance uint
-	userId  uint
+	UserId  uint
 }
 
 type ResponseAccount struct {
@@ -28,4 +28,8 @@ type ResponseUser struct {
 	Username string
 	Email    string
 	Accounts []ResponseAccount
+}
+
+type cruguer struct {
+	nada int
 }

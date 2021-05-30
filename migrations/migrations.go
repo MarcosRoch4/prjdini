@@ -39,7 +39,3 @@ func Migrate() {
 
 	createAccounts()
 }
-
-func nda() {
-
-}
