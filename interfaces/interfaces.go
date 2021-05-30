@@ -14,7 +14,6 @@ type Account struct {
 	Type    string
 	Name    string
 	Balance uint
-	UserId  uint
 }
 
 type ResponseAccount struct {
