@@ -27,5 +27,5 @@ type ResponseUser struct {
 	ID       uint
 	Username string
 	Email    string
-	Account  []ResponseAccount
+	Accounts []ResponseAccount
 }

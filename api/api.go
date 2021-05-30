@@ -3,12 +3,12 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"helpers"
 	"io/ioutil"
 	"log"
 	"net/http"
 
-	//"github.com/MarcosRoch4/prjdini/helpers?helpers"
+	"github.com/MarcosRoch4/prjdini/helpers"
+	"github.com/MarcosRoch4/prjdini/users"
 	"github.com/gorilla/mux"
 )
 
@@ -24,12 +24,12 @@ type ErrResponse struct {
 func login(w http.ResponseWriter, r *http.Request) {
 	// deixa o corpo preparado
 	body, err := ioutil.ReadAll(r.Body)
-	helpers.HandleErr(err)
+	helpers.HandlerErr(err)
 
 	// manipula o Login
 	var formattedBody Login
 	err = json.Unmarshal(body, &formattedBody)
-	helpers.HandleErr(err)
+	helpers.HandlerErr(err)
 	login := users.Login(formattedBody.Username, formattedBody.Password)
 
 	// Prepara a resposta

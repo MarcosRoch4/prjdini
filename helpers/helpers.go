@@ -11,15 +11,15 @@ func HandlerErr(err error) {
 	}
 }
 
-func HandAndSalt(pass []byt) string {
-	hashed, err := bcrypt.GenerateFromPassword(pass, bcrypt.MinConst)
+func HashAndSalt(pass []byte) string {
+	hashed, err := bcrypt.GenerateFromPassword(pass, bcrypt.MinCost)
 	HandlerErr(err)
 
 	return string(hashed)
 }
 
-func ConectDB() *gorm.DB {
-	db, er := gorm.Open("postgres", "host=127.0.0.1 port=5432 user=postgres dbname=bankapp password=postgres sslmode=disable")
+func ConnectDB() *gorm.DB {
+	db, err := gorm.Open("postgres", "host=127.0.0.1 port=5432 user=postgres dbname=bankapp password=postgres sslmode=disable")
 	HandlerErr(err)
 	return db
 }
