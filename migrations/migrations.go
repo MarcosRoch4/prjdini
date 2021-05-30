@@ -1,7 +1,8 @@
 package migrations
 
 import (
-	"github.com/MarcosRoch4/prjdini?helper"
+	"helpers"
+	//"github.com/MarcosRoch4/prjdini?helper"
 	"github.com/jinzhu/gorm"
 	
 )

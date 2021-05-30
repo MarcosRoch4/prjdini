@@ -3,8 +3,10 @@ package users
 import (
 	"time"
 
-	"github.com/MarcosRoch4/prjdini?helper"
-	"github.com/MarcosRoch4/prjdini?interfaces"
+	//"github.com/MarcosRoch4/prjdini?helper"
+	//"github.com/MarcosRoch4/prjdini?interfaces"
+	"helpers"
+	"interfaces"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -48,7 +50,7 @@ tokenContent := jwt.MapClaims{
 }
 jwtToken := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tokenContent)
 token, err := jwt.Token.SignedString([]byte("TokenPassword"))
-helpers.HandleErr(err)
+HandleErr(err)
 
 // Prepara a resposta
 

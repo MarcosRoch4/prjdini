@@ -1,11 +1,11 @@
 package main
 
-
-import(
-	 "github.com/MarcosRoch4/prjdini"
+import (
+	//	 "github.com/MarcosRoch4/prjdini"
+	"api"
 )
 
-func main(){
+func main() {
 	// migrations.Migrate()
 	api.StartApi()
 }
