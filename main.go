@@ -1,12 +1,12 @@
 package main
 
 import (
-	//"github.com/MarcosRoch4/prjdini/api"
-	"github.com/MarcosRoch4/prjdini/migrations"
+	"github.com/MarcosRoch4/prjdini/api"
+	//"github.com/MarcosRoch4/prjdini/migrations"
 )
 
 func main() {
-	migrations.Migrate()
+	//migrations.Migrate()
 
-	//api.StartApi()
+	api.StartApi()
 }
