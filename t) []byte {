@@ -1,0 +1,59 @@
+[33mcommit 349667d9738c478a53ca7de2ba048549ca02a440[m[33m ([m[1;36mHEAD -> [m[1;32mdevstep[m[33m, [m[1;31morigin/devstep[m[33m, [m[1;32mstyle[m[33m)[m
+Author: unknown <you@example.com>
+Date:   Sun May 30 20:23:58 2021 -0300
+
+    subindo a aplicação 100% funcional
+
+[33mcommit 44cdcbbeb41a4b08346a4763275f1cbc925c28d9[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m
+Author: unknown <you@example.com>
+Date:   Sun May 30 09:27:06 2021 -0300
+
+    resolvendo problema com o pacote Interfaces3-
+
+[33mcommit afbda47f949a7ceed20f7c7eb52307d3cc4cb031[m
+Author: unknown <you@example.com>
+Date:   Sun May 30 09:25:34 2021 -0300
+
+    resolvendo problema com o pacote Interfaces3
+
+[33mcommit 96739b9624decdd7c5acd4d87549c0e052725158[m
+Author: unknown <you@example.com>
+Date:   Sun May 30 09:23:45 2021 -0300
+
+    resolvendo problema com o pacote Interfaces2
+
+[33mcommit 726b92002b78ec7ea8fb2b39bf8d0e75eda3c0cb[m
+Author: unknown <you@example.com>
+Date:   Sun May 30 09:21:49 2021 -0300
+
+    resolvendo problema com o pacote Interfaces
+
+[33mcommit e8068a3efa7cdf3ac46b4ce97eaffb06ca9085d4[m
+Author: unknown <you@example.com>
+Date:   Sun May 30 09:18:26 2021 -0300
+
+    resolvendo problema com o pacote migrations
+
+[33mcommit bf27319b84fe58a3797c843972b8af2901d14a02[m
+Author: unknown <you@example.com>
+Date:   Sun May 30 09:12:15 2021 -0300
+
+    resolvendo problemos com unknow field
+
+[33mcommit 712255f46d0744110158c21ead556b2b9e07d71c[m
+Author: unknown <you@example.com>
+Date:   Fri May 28 01:00:28 2021 -0300
+
+    habilitando pacotes internos
+
+[33mcommit 31350efda56bb5ca070bcc8c654edb9eb7f52f15[m
+Author: unknown <you@example.com>
+Date:   Thu May 27 22:28:29 2021 -0300
+
+    Subindo a aplicação pela primeira vez
+
+[33mcommit c8ea6ae1546bd1f3a39b90c8b82c735fba0ce74d[m
+Author: unknown <you@example.com>
+Date:   Thu May 27 22:22:12 2021 -0300
+
+    Subindo primeira etapa da aplicação
