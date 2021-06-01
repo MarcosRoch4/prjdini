@@ -26,7 +26,7 @@ func prepareToken(user *interfaces.User) string {
 
 }
 
-func prepareResponse(user *interfaces.User, accounts []interfaces.ResponseAccount) map[string]interface{} {
+func prepareResponse(user *interfaces.User, accounts []interfaces.ResponseAccount, withToken bool) map[string]interface{} {
 	// configure a resposta
 	responseUser := &interfaces.ResponseUser{
 		ID:       user.ID,
@@ -37,9 +37,12 @@ func prepareResponse(user *interfaces.User, accounts []interfaces.ResponseAccoun
 
 	// Prepara a resposta
 
-	var token = prepareToken(user)
 	var response = map[string]interface{}{"message": "all is fine"}
-	response["jwt"] = token
+	if withToken {
+		var token = prepareToken(user)
+		response["jwt"] = token
+	}
+
 	response["data"] = responseUser
 
 	fmt.Println("message:", responseUser)
@@ -78,7 +81,7 @@ func Login(username string, pass string) map[string]interface{} {
 
 		defer db.Close()
 
-		var response = prepareResponse(user, accounts)
+		var response = prepareResponse(user, accounts, true)
 
 		return response
 	} else {
@@ -112,11 +115,35 @@ func Register(username string, email string, pass string) map[string]interface{}
 		accounts := []interfaces.ResponseAccount{}
 		respAccount := interfaces.ResponseAccount{ID: account.ID, Name: account.Name, Balance: int(account.Balance)}
 		accounts = append(accounts, respAccount) // res []interfaces.ResponseAccount) map[string]interfaces{}
-		var response = prepareResponse(user, accounts)
+		var response = prepareResponse(user, accounts, true)
 
 		return response
 
 	} else {
 		return map[string]interface{}{"message": "not Valid values"}
+	}
+}
+
+func GetUser(id string, jwt string) map[string]interface{} {
+	isValid := helpers.ValidateToken(id, jwt)
+	fmt.Println("é válido?", isValid)
+	if isValid {
+		db := helpers.ConnectDB()
+		user := &interfaces.User{}
+		if db.Where("id = ?", id).First(&user).RecordNotFound() {
+			return map[string]interface{}{"message": "User not found"}
+		}
+
+		accounts := []interfaces.ResponseAccount{}
+		db.Table("accounts").Select("id, name, balance").Where("user_id = ?", user.ID).Scan(&accounts)
+
+		defer db.Close()
+
+		var response = prepareResponse(user, accounts, false)
+
+		return response
+
+	} else {
+		return map[string]interface{}{"message": "not Valid token"}
 	}
 }
