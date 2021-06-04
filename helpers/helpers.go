@@ -1,11 +1,16 @@
 package helpers
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
+	"net/http"
 	"regexp"
+	"strconv"
+	"strings"
 
 	"github.com/MarcosRoch4/prjdini/interfaces"
-	"github.com/jinzhu/gorm"
+	"github.com/dgrijalva/jwt-go"
 	_ "github.com/lib/pq"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -21,13 +26,6 @@ func HashAndSalt(pass []byte) string {
 	HandlerErr(err)
 
 	return string(hashed)
-}
-
-func ConnectDB() *gorm.DB {
-	db, err := gorm.Open("postgres", "host=127.0.0.1 port=5432 user=postgres dbname=prjdini password=postgres sslmode=disable")
-	fmt.Println("Database conection:", db)
-	HandlerErr(err)
-	return db
 }
 
 func Validation(values []interfaces.Validation) bool {
@@ -56,4 +54,36 @@ func Validation(values []interfaces.Validation) bool {
 	}
 
 	return true
+}
+
+func PanicHandler(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			error := recover()
+			if error != nil {
+				log.Println(error)
+				resp := interfaces.ErrResponse{Message: "Internal Server Error"}
+				json.NewEncoder(w).Encode(resp)
+			}
+		}()
+		next.ServeHTTP(w, r)
+	})
+}
+
+func ValidateToken(id string, jwtToken string) bool {
+	cleanJWT := strings.Replace(jwtToken, "Bearer ", "", -1)
+	tokenData := jwt.MapClaims{}
+	fmt.Println("tokendata", tokenData)
+	token, err := jwt.ParseWithClaims(cleanJWT, tokenData, func(token *jwt.Token) (interface{}, error) {
+		return []byte("TokenPassword"), nil
+	})
+
+	HandlerErr(err)
+	var userId, _ = strconv.ParseFloat(id, 8)
+	if token.Valid && tokenData["user_id"] == userId {
+		return true
+	} else {
+		return false
+	}
+
 }

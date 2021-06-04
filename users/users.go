@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/MarcosRoch4/prjdini/database"
 	"github.com/MarcosRoch4/prjdini/helpers"
 	"github.com/MarcosRoch4/prjdini/interfaces"
 
@@ -26,7 +27,7 @@ func prepareToken(user *interfaces.User) string {
 
 }
 
-func prepareResponse(user *interfaces.User, accounts []interfaces.ResponseAccount) map[string]interface{} {
+func prepareResponse(user *interfaces.User, accounts []interfaces.ResponseAccount, withToken bool) map[string]interface{} {
 	// configure a resposta
 	responseUser := &interfaces.ResponseUser{
 		ID:       user.ID,
@@ -37,9 +38,12 @@ func prepareResponse(user *interfaces.User, accounts []interfaces.ResponseAccoun
 
 	// Prepara a resposta
 
-	var token = prepareToken(user)
 	var response = map[string]interface{}{"message": "all is fine"}
-	response["jwt"] = token
+	if withToken {
+		var token = prepareToken(user)
+		response["jwt"] = token
+	}
+
 	response["data"] = responseUser
 
 	fmt.Println("message:", responseUser)
@@ -58,9 +62,9 @@ func Login(username string, pass string) map[string]interface{} {
 
 	if valid {
 		// conecta no DB
-		db := helpers.ConnectDB()
+
 		user := &interfaces.User{}
-		if db.Where("username = ?", username).First(&user).RecordNotFound() {
+		if database.DB.Where("username = ?", username).First(&user).RecordNotFound() {
 			return map[string]interface{}{"message": "User not found"}
 		}
 
@@ -74,11 +78,9 @@ func Login(username string, pass string) map[string]interface{} {
 
 		// encontra a conta do usuário
 		accounts := []interfaces.ResponseAccount{}
-		db.Table("accounts").Select("id, name, balance").Where("user_id = ?", user.ID).Scan(&accounts)
+		database.DB.Table("accounts").Select("id, name, balance").Where("user_id = ?", user.ID).Scan(&accounts)
 
-		defer db.Close()
-
-		var response = prepareResponse(user, accounts)
+		var response = prepareResponse(user, accounts, true)
 
 		return response
 	} else {
@@ -97,26 +99,49 @@ func Register(username string, email string, pass string) map[string]interface{}
 	fmt.Println(valid)
 	if valid {
 		fmt.Println("Os dados estão válidos")
-		db := helpers.ConnectDB()
+		//db := helpers.ConnectDB()
 		generatedPassword := helpers.HashAndSalt([]byte(pass))
 		user := &interfaces.User{Username: username, Email: email, Password: generatedPassword}
-		db.Create(&user)
+		database.DB.Create(&user)
 
 		account := &interfaces.Account{Type: "Daily Account", Name: string(username + "'s" + " account"),
 			Balance: 0, UserId: user.ID}
 
-		db.Create(&account)
+		database.DB.Create(&account)
 
-		defer db.Close()
+		//defer db.Close()
 
 		accounts := []interfaces.ResponseAccount{}
 		respAccount := interfaces.ResponseAccount{ID: account.ID, Name: account.Name, Balance: int(account.Balance)}
 		accounts = append(accounts, respAccount) // res []interfaces.ResponseAccount) map[string]interfaces{}
-		var response = prepareResponse(user, accounts)
+		var response = prepareResponse(user, accounts, true)
 
 		return response
 
 	} else {
 		return map[string]interface{}{"message": "not Valid values"}
+	}
+}
+
+func GetUser(id string, jwt string) map[string]interface{} {
+	isValid := helpers.ValidateToken(id, jwt)
+	fmt.Println("é válido?", isValid)
+	fmt.Println("Token é esse ai", jwt)
+	if isValid {
+
+		user := &interfaces.User{}
+		if database.DB.Where("id = ?", id).First(&user).RecordNotFound() {
+			return map[string]interface{}{"message": "User not found"}
+		}
+
+		accounts := []interfaces.ResponseAccount{}
+		database.DB.Table("accounts").Select("id, name, balance").Where("user_id = ?", user.ID).Scan(&accounts)
+
+		var response = prepareResponse(user, accounts, false)
+
+		return response
+
+	} else {
+		return map[string]interface{}{"message": "not Valid token"}
 	}
 }

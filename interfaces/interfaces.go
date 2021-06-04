@@ -34,3 +34,20 @@ type Validation struct {
 	Value string
 	Valid string
 }
+
+type ErrResponse struct {
+	Message string
+}
+
+type Transaction struct {
+	gorm.Model
+	From   uint
+	To     uint
+	Amount int
+}
+type ResponseTransaction struct {
+	ID     uint
+	From   uint
+	To     uint
+	Amount int
+}
