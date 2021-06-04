@@ -11,7 +11,6 @@ import (
 
 	"github.com/MarcosRoch4/prjdini/interfaces"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -27,13 +26,6 @@ func HashAndSalt(pass []byte) string {
 	HandlerErr(err)
 
 	return string(hashed)
-}
-
-func ConnectDB() *gorm.DB {
-	db, err := gorm.Open("postgres", "host=127.0.0.1 port=5432 user=postgres dbname=prjdini password=postgres sslmode=disable")
-	fmt.Println("Database conection:", db)
-	HandlerErr(err)
-	return db
 }
 
 func Validation(values []interfaces.Validation) bool {
@@ -79,7 +71,7 @@ func PanicHandler(next http.Handler) http.Handler {
 }
 
 func ValidateToken(id string, jwtToken string) bool {
-	cleanJWT := strings.Replace(jwtToken, "Bearer", "", -1)
+	cleanJWT := strings.Replace(jwtToken, "Bearer ", "", -1)
 	tokenData := jwt.MapClaims{}
 	fmt.Println("tokendata", tokenData)
 	token, err := jwt.ParseWithClaims(cleanJWT, tokenData, func(token *jwt.Token) (interface{}, error) {
@@ -88,7 +80,7 @@ func ValidateToken(id string, jwtToken string) bool {
 
 	HandlerErr(err)
 	var userId, _ = strconv.ParseFloat(id, 8)
-	if token.Valid && tokenData["userId"] == userId {
+	if token.Valid && tokenData["user_id"] == userId {
 		return true
 	} else {
 		return false

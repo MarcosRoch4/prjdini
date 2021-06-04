@@ -2,6 +2,7 @@ package migrations
 
 import (
 	//"helpers"
+	"github.com/MarcosRoch4/prjdini/database"
 	"github.com/MarcosRoch4/prjdini/helpers"
 	"github.com/MarcosRoch4/prjdini/interfaces"
 
@@ -9,7 +10,6 @@ import (
 )
 
 func createAccounts() {
-	db := helpers.ConnectDB()
 
 	users := &[2]interfaces.User{
 		{Username: "Marcos", Email: "marcos.rocha@sibylconsultoria.com.br"},
@@ -20,22 +20,21 @@ func createAccounts() {
 		// o jeito certo de fazer
 		generatedPassword := helpers.HashAndSalt([]byte(users[i].Username))
 		user := &interfaces.User{Username: users[i].Username, Email: users[i].Email, Password: generatedPassword}
-		db.Create(&user)
+		database.DB.Create(&user)
 
 		account := &interfaces.Account{Type: "Daily Account", Name: string(users[i].Username + "'s" + " account"),
 			Balance: uint(10000 + int(i+1)), UserId: user.ID}
 
-		db.Create(&account)
+		database.DB.Create(&account)
 	}
-	defer db.Close()
+
 }
 
 func Migrate() {
 	User := &interfaces.User{}
 	Account := &interfaces.Account{}
-	db := helpers.ConnectDB()
-	db.AutoMigrate(&User, &Account)
-	defer db.Close()
+	Transactions := &interfaces.Transaction{}
+	database.DB.AutoMigrate(&User, &Account, &Transactions)
 
 	createAccounts()
 }
